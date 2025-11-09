@@ -26,8 +26,8 @@ jobs:
           cache: 'pnpm'
       - run: |
           pnpm install
-          pnpm run test:advanced
-  e2e:
+          pnpm run test:e2e:basic
+  advanced:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -46,4 +46,4 @@ jobs:
         run: |
           pnpm install
           npx playwright install --with-deps
-          pnpm run test:e2e
+          pnpm run test:e2e:advanced

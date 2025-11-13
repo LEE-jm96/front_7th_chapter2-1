@@ -7,12 +7,31 @@ import { getSearchValue } from "../utils/jsUtils.js";
 import { openCartModal, closeModal } from "../utils/modalUtils.js";
 import { cartStore } from "../store/cartStore.js";
 import { showToast, ToastType } from "../utils/toast.js";
+import { updateCartBadge } from "../utils/cartBadge.js";
 
 /**
  * click 이벤트 핸들러
  * @param {Event} event - 클릭 이벤트
  */
 export const handleClick = (event) => {
+  // 오류 상태일 때는 필터 관련 클릭 무시 (장바구니, 모달 등은 허용)
+  if (window.isErrorState) {
+    // 카테고리, 검색 등 필터 관련 클릭 무시
+    if (
+      event.target.dataset.category1 ||
+      event.target.dataset.category2 ||
+      event.target.dataset.breadcrumb === "reset" ||
+      event.target.id === "search-btn" ||
+      event.target.closest("[data-category1]") ||
+      event.target.closest("[data-category2]") ||
+      event.target.closest("[data-breadcrumb='reset']") ||
+      event.target.closest("#search-btn")
+    ) {
+      event.preventDefault();
+      return;
+    }
+  }
+
   // 장바구니 아이콘 클릭
   if (event.target.closest("#cart-icon-btn")) {
     console.log('[DEBUG] Cart icon clicked');
@@ -338,6 +357,20 @@ export const handleClick = (event) => {
     window.history.back();
     return;
   }
+
+  // 오류 페이지의 "다시 시도" 버튼
+  if (event.target.id === "retry-btn" || event.target.closest('[id="retry-btn"]')) {
+    event.preventDefault();
+    // 장바구니 배지 즉시 업데이트 (재시도 전에도 유지)
+    updateCartBadge();
+    // main.js에서 설정한 retryCallback 호출
+    const retryBtn = event.target.closest('[id="retry-btn"]') || event.target;
+    const callback = window.currentRetryCallback;
+    if (callback && typeof callback === 'function') {
+      callback();
+    }
+    return;
+  }
 };
 
 
@@ -346,6 +379,12 @@ export const handleClick = (event) => {
  * @param {Event} event - change 이벤트
  */
 export const handleChange = (event) => {
+  // 오류 상태일 때는 필터 변경 무시
+  if (window.isErrorState) {
+    event.preventDefault();
+    return;
+  }
+  
   const { id, value } = event.target;
   
   if (id === "limit-select") {
@@ -370,6 +409,11 @@ export const handleKeyDown = (event) => {
   }
   
   if (event.target.id === "search-input" && event.key === "Enter") {
+    // 오류 상태일 때는 검색 무시
+    if (window.isErrorState) {
+      event.preventDefault();
+      return;
+    }
     Router.search(getSearchValue());
   }
 };

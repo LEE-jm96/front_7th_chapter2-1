@@ -1,5 +1,5 @@
 export const _404Page = () => {
-  return /*html*/`
+  return /*html*/ `
     <div class="text-center my-4 py-20 shadow-md p-6 bg-white rounded-lg">
       <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -28,7 +28,7 @@ export const _404Page = () => {
         <rect x="130" y="130" width="60" height="2" rx="1" fill="url(#blueGradient)" opacity="0.3"/>
       </svg>
       
-      <a href="/" data-link id="404-home-btn" class="inline-block px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">홈으로</a>
+      <a href="${import.meta.env.BASE_URL}" data-link id="404-home-btn" class="inline-block px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">홈으로</a>
     </div>
   `;
-};  
+};

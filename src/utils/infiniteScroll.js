@@ -6,8 +6,9 @@ let isLoadingMore = false; // 중복 로드 방지
 
 /**
  * 무한스크롤 옵저버 설정
+ * @param {boolean} hasNext - 다음 페이지가 있는지 여부
  */
-export async function setupInfiniteScroll() {
+export async function setupInfiniteScroll(hasNext = true) {
   // 기존 옵저버 정리
   if (infiniteScrollObserver) {
     infiniteScrollObserver.disconnect();
@@ -16,11 +17,30 @@ export async function setupInfiniteScroll() {
   const trigger = document.getElementById("infinite-scroll-trigger");
   if (!trigger) return;
 
+  // 다음 페이지가 없으면 트리거를 observe하지 않음
+  if (!hasNext) {
+    // 트리거가 있지만 다음 페이지가 없으면 제거
+    trigger.remove();
+    return;
+  }
+
   infiniteScrollObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         // 트리거가 뷰포트에 진입했을 때
         if (entry.isIntersecting && !isLoadingMore) {
+          // 다음 페이지가 있는지 DOM에서 확인 (loading-more div가 있으면 hasNext)
+          const loadingMoreDiv = document.getElementById("loading-more");
+          const stillHasNext = !!loadingMoreDiv;
+
+          if (!stillHasNext) {
+            // 다음 페이지가 없으면 observe 중단
+            if (infiniteScrollObserver) {
+              infiniteScrollObserver.unobserve(entry.target);
+            }
+            return;
+          }
+
           const searchParams = new URLSearchParams(location.search);
           const currentPage = parseInt(searchParams.get("page")) || 1;
           const nextPage = currentPage + 1;
@@ -34,6 +54,26 @@ export async function setupInfiniteScroll() {
       rootMargin: "300px", // 트리거까지 300px 남았을 때 감지 (더 일찍 로드)
     },
   );
+
+  // 트리거가 이미 뷰포트에 있는지 확인
+  const rect = trigger.getBoundingClientRect();
+  const isInViewport = rect.top < window.innerHeight + 300; // rootMargin 고려
+
+  if (isInViewport && hasNext) {
+    // 트리거가 이미 뷰포트에 있고 다음 페이지가 있으면, 약간의 지연 후 로드
+    // 초기 렌더링 완료 후 체크하여 불필요한 로드를 방지
+    setTimeout(() => {
+      const loadingMoreDiv = document.getElementById("loading-more");
+      const stillHasNext = !!loadingMoreDiv;
+
+      if (stillHasNext && !isLoadingMore) {
+        const searchParams = new URLSearchParams(location.search);
+        const currentPage = parseInt(searchParams.get("page")) || 1;
+        const nextPage = currentPage + 1;
+        loadNextPage(nextPage);
+      }
+    }, 100);
+  }
 
   infiniteScrollObserver.observe(trigger);
 }

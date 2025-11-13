@@ -46,7 +46,7 @@ const renderFullHomePage = async (params) => {
       }),
     );
 
-    setupInfiniteScroll();
+    setupInfiniteScroll(productsData.pagination?.hasNext);
 
     // 장바구니 배지 업데이트 (Header 렌더링 후)
     setTimeout(() => {
@@ -55,7 +55,7 @@ const renderFullHomePage = async (params) => {
     // 오류 상태 해제 (성공적으로 로드된 경우)
     window.isErrorState = false;
   } catch (error) {
-    console.error('Failed to load home page:', error);
+    console.error("Failed to load home page:", error);
     // 오류 상태 플래그 설정
     window.isErrorState = true;
     // SearchForm은 유지하고 ProductList에 오류 전달
@@ -101,7 +101,7 @@ const renderPartialHomePage = async (params) => {
       pagination: productsData.pagination,
     });
     renderTo(".product-list", productListHtml, { replace: true });
-    setupInfiniteScroll();
+    setupInfiniteScroll(productsData.pagination?.hasNext);
 
     // 포커스 복원
     restoreSearchFocus(wasSearchFocused);
@@ -113,7 +113,7 @@ const renderPartialHomePage = async (params) => {
     // 오류 상태 해제 (성공적으로 로드된 경우)
     window.isErrorState = false;
   } catch (error) {
-    console.error('Failed to load home page:', error);
+    console.error("Failed to load home page:", error);
     // 오류 상태 플래그 설정
     window.isErrorState = true;
     // SearchForm은 유지하고 ProductList에 오류 전달
@@ -168,7 +168,7 @@ const renderDetailPage = async () => {
       updateCartBadge();
     }, 0);
   } catch (error) {
-    console.error('Failed to load detail page:', error);
+    console.error("Failed to load detail page:", error);
     // 오류 상태 플래그 설정
     window.isErrorState = true;
     // DetailPage에 오류 전달
@@ -224,7 +224,6 @@ const render404Page = () => {
     updateCartBadge();
   }, 0);
 };
-
 
 // 이벤트 리스너 등록
 const setupEventListeners = () => {

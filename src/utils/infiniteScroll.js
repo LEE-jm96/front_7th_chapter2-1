@@ -104,7 +104,8 @@ async function loadNextPage(nextPage) {
       // "더 이상 상품이 없습니다" 메시지 표시
       const loadingMoreDiv = document.getElementById("loading-more");
       if (loadingMoreDiv) {
-        loadingMoreDiv.innerHTML = '<div class="text-center py-4 text-sm text-gray-500">더 이상 상품이 없습니다.</div>';
+        loadingMoreDiv.innerHTML =
+          '<div class="text-center py-4 text-sm text-gray-500">모든 상품을 확인했습니다.</div>';
         loadingMoreDiv.classList.remove("hidden");
       }
     } else {

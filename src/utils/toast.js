@@ -1,10 +1,3 @@
-/**
- * 토스트 알림 유틸리티
- */
-
-/**
- * 토스트 타입
- */
 export const ToastType = {
   SUCCESS: "success", // 초록색 - 성공
   INFO: "info", // 파란색 - 정보

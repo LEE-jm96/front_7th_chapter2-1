@@ -18,6 +18,8 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -25,6 +27,7 @@ jobs:
       - run: |
           pnpm install
           pnpm run test:e2e:basic
+
   advanced:
     timeout-minutes: 60
     runs-on: ubuntu-latest
@@ -34,6 +37,8 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
       - uses: actions/setup-node@v4
         with:
           node-version: 22

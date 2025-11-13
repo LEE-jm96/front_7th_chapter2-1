@@ -142,7 +142,7 @@ async function render(isInitial = false) {
   }
 
   // 유효하지 않은 경로면 404 페이지 표시
-  if (!isValidPath(pathname)) {
+  if (!isValidPath(relativePath)) {
     render404Page();
     return;
   }

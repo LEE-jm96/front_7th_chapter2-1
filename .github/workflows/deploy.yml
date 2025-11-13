@@ -1,6 +1,6 @@
 name: Deploy to GitHub Pages
 
-on:
+on: 
   push:
     branches:
       - main
@@ -35,6 +35,10 @@ jobs:
 
       - name: Build
         run: pnpm run build
+
+      - name: Create 404.html for SPA routing
+        run: |
+          cp ./dist/index.html ./dist/404.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

@@ -17,7 +17,7 @@ export const SearchForm = ({ filters, pagination, categories }) => {
       primary: isSelected ? "bg-blue-500 text-white border-blue-500" : "border-gray-300 hover:bg-blue-50",
       secondary: isSelected ? "bg-blue-100 border-blue-500 text-blue-700" : "border-gray-300 hover:bg-gray-50",
     };
-    return `<button class="px-3 py-1 text-sm border rounded ${styles[styleType]}" ${dataAttr}="${categoryName}">${categoryName}</button>`;
+    return `<button class="px-3 py-1 text-sm border rounded ${styles[styleType]}" ${dataAttr}="${categoryName}"> ${categoryName} </button>`;
   };
 
   const renderCategory1 = () => {

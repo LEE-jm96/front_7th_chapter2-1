@@ -1,7 +1,3 @@
-/**
- * 이벤트 핸들러 모음
- */
-
 import { Router } from "../Router.js";
 import { getSearchValue } from "../utils/jsUtils.js";
 import { openCartModal, closeModal } from "../utils/modalUtils.js";
@@ -202,12 +198,8 @@ export const handleClick = (event) => {
     event.preventDefault();
     event.stopPropagation(); // 이벤트 버블링 중단!
     
-    console.log('[DEBUG] Add to cart button clicked');
-    
     const btn = event.target.closest(".add-to-cart-btn, #add-to-cart-btn");
     const productId = btn.dataset.productId;
-    
-    console.log('[DEBUG] Product ID:', productId);
     
     // 상품 정보 가져오기 (간단한 방법: DOM에서 추출)
     const productCard = btn.closest('.product-card, .related-product-card');
@@ -218,7 +210,6 @@ export const handleClick = (event) => {
     try {
       if (productCard) {
         // 상품 카드에서 정보 추출
-        console.log('[DEBUG] Extracting from product card');
         const img = productCard.querySelector('img');
         const title = productCard.querySelector('h3')?.textContent.trim() || img?.alt || '';
         const priceText = productCard.querySelector('.text-lg.font-bold')?.textContent || '0';
@@ -230,11 +221,8 @@ export const handleClick = (event) => {
           image: img?.src || '',
           lprice: price
         };
-        
-        console.log('[DEBUG] Product extracted:', product);
       } else if (detailSection) {
         // 상세 페이지에서 정보 추출
-        console.log('[DEBUG] Extracting from detail page');
         const title = document.querySelector('h1')?.textContent.trim() || '';
         const priceText = document.querySelector('.text-3xl.font-bold, .text-2xl.font-bold')?.textContent || '0';
         const price = parseInt(priceText.replace(/[^0-9]/g, '')) || 0;
@@ -251,9 +239,6 @@ export const handleClick = (event) => {
           lprice: price
         };
         
-        console.log('[DEBUG] Product extracted:', product);
-        console.log('[DEBUG] Quantity:', quantity);
-        
         // 수량만큼 장바구니에 추가
         for (let i = 0; i < quantity; i++) {
           cartStore.addItem(product);
@@ -263,27 +248,19 @@ export const handleClick = (event) => {
         // 테스트 코드와 일치하도록 항상 "장바구니에 추가되었습니다"로 표시
         showToast('장바구니에 추가되었습니다', ToastType.SUCCESS);
         
-        console.log('[DEBUG] Cart state:', cartStore.getState());
         return; // 여기서 종료
-      } else {
-        console.warn('[WARNING] Could not find product card or detail section');
       }
       
       // 상세 페이지는 이미 위에서 처리했으므로 여기서는 상품 카드만 처리
       if (product && product.productId && productCard) {
-        console.log('[DEBUG] Adding to cart:', product);
         cartStore.addItem(product);
         
         // 토스트 알림 표시 (성공)
         showToast('장바구니에 추가되었습니다', ToastType.SUCCESS);
-        
-        console.log('[DEBUG] Cart state:', cartStore.getState());
       } else if (!product || !product.productId) {
-        console.error('[ERROR] Invalid product data:', product);
         showToast('상품 정보를 찾을 수 없습니다', ToastType.ERROR);
       }
     } catch (error) {
-      console.error('[ERROR] Failed to add to cart:', error);
       showToast('장바구니 담기에 실패했습니다', ToastType.ERROR);
     }
     

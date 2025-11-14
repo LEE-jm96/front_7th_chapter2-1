@@ -96,8 +96,6 @@ const renderCartModal = () => {
  * 장바구니 모달 열기 (Store 연동)
  */
 export const openCartModal = () => {
-  console.log('[DEBUG] openCartModal called');
-  
   try {
     // 컨테이너 생성 및 표시
     const container = ensureModalContainer();
@@ -114,10 +112,7 @@ export const openCartModal = () => {
     unsubscribe = cartStore.subscribe(() => {
       renderCartModal();
     });
-    
-    console.log('[DEBUG] Cart modal opened successfully');
   } catch (error) {
-    console.error('[ERROR] Failed to open cart modal:', error);
     throw error;
   }
 };

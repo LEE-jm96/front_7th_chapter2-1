@@ -1,7 +1,3 @@
-/**
- * 페이지 렌더링 관련 헬퍼 함수들
- */
-
 import { updateCartBadge } from "./cartBadge.js";
 
 /**
@@ -20,7 +16,6 @@ export const updateCartBadgeAfterRender = () => {
  * @param {string} context - 오류 발생 컨텍스트 (로깅용)
  */
 export const handleRenderError = (error, retryFn, context = "page") => {
-  console.error(`Failed to load ${context}:`, error);
   window.isErrorState = true;
   window.currentRetryCallback = async () => {
     window.isErrorState = false;
@@ -36,3 +31,4 @@ export const handleRenderSuccess = () => {
   window.isErrorState = false;
   updateCartBadgeAfterRender();
 };
+

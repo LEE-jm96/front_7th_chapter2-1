@@ -1,7 +1,3 @@
-/**
- * 장바구니 개수 배지 관리
- */
-
 import { cartStore } from '../store/cartStore.js';
 
 // 전역 구독 관리 (한 번만 구독)
